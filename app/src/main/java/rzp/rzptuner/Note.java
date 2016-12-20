@@ -1,4 +1,4 @@
-package com.chrynan.guitartuner;
+package rzp.rzptuner;
 
 import org.json.JSONObject;
 
