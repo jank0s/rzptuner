@@ -57,8 +57,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
+            Tuner tuner = new Tuner();
             while(!isCancelled()){
                 //PROCESS AUDIO
+                tuner.start();
                 i++;
 
                 //PUBLISH RESULT

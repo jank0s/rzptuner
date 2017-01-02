@@ -16,7 +16,7 @@ public class Tuner {
     private int sampleRate;
     private int bufferSize;
     private volatile int readSize;
-    private volatile float [] intermediaryBuffer;
+    private volatile short [] tmpBuffer;
     private volatile float [] buffer;
     private AudioRecord audioRecord;
     private boolean isRecording;
@@ -27,7 +27,6 @@ public class Tuner {
         bufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
         readSize = bufferSize/2;
         buffer = new float[readSize];
-        intermediaryBuffer = new float[readSize];
         isRecording = false;
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
         currentNote = new Note(Note.DEFAULT_FREQUENCY);
@@ -38,6 +37,7 @@ public class Tuner {
         isRecording = true;
         if(audioRecord!=null){
             audioRecord.startRecording();
+            findNote();
         }
     }
 
@@ -46,5 +46,21 @@ public class Tuner {
         if(audioRecord!=null){
             audioRecord.stop();
         }
+    }
+
+    private void findNote(){
+        while (isRecording){
+            int a = audioRecord.read(tmpBuffer, 0, readSize);
+            buffer = shortArrayToFloatArray(tmpBuffer);
+
+        }
+    }
+
+    private float [] shortArrayToFloatArray(short[] array){
+        float [] farray = new float[array.length];
+        for(int i = 0; i < array.length; i++){
+            farray[i] = array[i];
+        }
+        return farray;
     }
 }
