@@ -1,5 +1,8 @@
 package rzp.rzptuner;
 
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +17,14 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonStart;
     private TextView tvResult;
     private boolean running;
+    private int sampleRate;
+    private int bufferSize;
+    private volatile int readSize;
+    private volatile short [] buffer;
+    private AudioRecord audioRecord;
+    private boolean isRecording;
+    private volatile Note currentNote;
+
 
     TunerTask task;
 
@@ -53,14 +64,22 @@ public class MainActivity extends AppCompatActivity {
         public TunerTask(){
             super();
             i = 0;
+            bufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
+            readSize = bufferSize/2;
+            buffer = new short[readSize];
+            isRecording = false;
+            audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+            currentNote = new Note(Note.DEFAULT_FREQUENCY);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            Tuner tuner = new Tuner();
+            audioRecord.startRecording();
             while(!isCancelled()){
                 //PROCESS AUDIO
-                tuner.start();
+                audioRecord.read(buffer, 0, readSize);
+                Detector d = new Detector();
+                Detector note = d.getPitch(buffer);
                 i++;
 
                 //PUBLISH RESULT
