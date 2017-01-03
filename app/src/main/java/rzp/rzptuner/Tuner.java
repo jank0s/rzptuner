@@ -48,10 +48,10 @@ public class Tuner {
     }
 
     private void findNote(){
-        while (isRecording){
-            audioRecord.read(buffer, 0, readSize);
-            Detector d = new Detector();
-            Detector note = d.getPitch(buffer);
-        }
+//        while (isRecording){
+//            audioRecord.read(buffer, 0, readSize);
+//            Detector d = new Detector();
+//            Detector note = d.getPitch(buffer);
+//        }
     }
 }

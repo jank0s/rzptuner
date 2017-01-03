@@ -7,17 +7,19 @@ import static rzp.rzptuner.FFT.fft;
  */
 
 public class Detector {
-    private String noteName;
-    private double freq;
+    private String note;
+    private double frequency;
     private double deviation;
+    private int position;
 
     public void Detector(){
-        noteName = "";
+        note = "";
+        position = 0;
         deviation = 0.0;
-        freq = 0.0;
+        frequency = 0.0;
     }
 
-    public Detector getPitch(short[] buffer){
+    public void getPitch(short[] buffer, int sampleRate){
 
         //step 1 FFT
         Complex[] input = new Complex[buffer.length];
@@ -26,28 +28,26 @@ public class Detector {
         }
 
         fft(input);
-        double sum = 0;
+        double maxPeak = 0;
+        int index  = 0;
+        int counter = 0;
         for(Complex c : input){
-            sum += Math.sqrt(Math.pow(c.re, 2) + Math.pow(c.im,2));
+            double tmpPeak = Math.sqrt(Math.pow(c.re, 2) + Math.pow(c.im,2));
+            if(tmpPeak > maxPeak){
+                maxPeak = tmpPeak;
+                index =  counter;
+            }
+            counter++;
         }
 
-        double freq = sum/input.length;
+        double freq = (index * sampleRate)/input.length;
 
         //step 2 find correct note
-        Note note = new Note(freq);
-        noteName = note.getNote();
-        freq = note.getFrequency();
-        deviation = note.getDifference();
-
-        return this;
-    }
-
-    public String getNoteName() {
-        return noteName;
-    }
-
-    public void setNoteName(String noteName) {
-        this.noteName = noteName;
+        Note noteDetect = new Note(freq);
+        note = noteDetect.getNote();
+        frequency = noteDetect.getFrequency();
+        deviation = noteDetect.getDifference();
+        position = noteDetect.getPosition();
     }
 
     public double getDeviation() {
@@ -58,11 +58,27 @@ public class Detector {
         this.deviation = deviation;
     }
 
-    public double getFreq() {
-        return freq;
+    public String getNote() {
+        return note;
     }
 
-    public void setFreq(double freq) {
-        this.freq = freq;
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public double getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(double frequency) {
+        this.frequency = frequency;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

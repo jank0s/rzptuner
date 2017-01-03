@@ -58,14 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private class TunerTask extends AsyncTask<Void, Double, Void> {
+    private class TunerTask extends AsyncTask<Void, String, Void> {
         int i;
 
         public TunerTask(){
             super();
             i = 0;
-            bufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
-            readSize = bufferSize/2;
+            sampleRate = 44100;
+            bufferSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
+            readSize = bufferSize;
             buffer = new short[readSize];
             isRecording = false;
             audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
@@ -79,24 +80,25 @@ public class MainActivity extends AppCompatActivity {
                 //PROCESS AUDIO
                 audioRecord.read(buffer, 0, readSize);
                 Detector d = new Detector();
-                Detector note = d.getPitch(buffer);
+                d.getPitch(buffer, readSize);
+
                 i++;
 
                 //PUBLISH RESULT
-                publishProgress(Double.valueOf(i));
+                publishProgress(Double.valueOf(d.getFrequency()).toString() + "   " + d.getNote() + "  " + d.getPosition());
 
                 //FAKE DELAY FOR TEST
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
             return null;
         }
 
         @Override
-        protected void onProgressUpdate(Double... params){
+        protected void onProgressUpdate(String... params){
             //VISUALIZE RESULT
             tvResult.setText(params[0] + "");
         }
