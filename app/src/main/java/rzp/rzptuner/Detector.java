@@ -32,17 +32,18 @@ public class Detector {
         int index  = 0;
         int counter = 0;
         for(Complex c : input){
-            double tmpPeak = Math.sqrt(Math.pow(c.re, 2) + Math.pow(c.im,2));
-            if(tmpPeak > maxPeak){
-                maxPeak = tmpPeak;
-                index =  counter;
+            double peak = Math.sqrt(Math.pow(c.re, 2) + Math.pow(c.im,2));
+            if(peak > maxPeak){
+                maxPeak = peak;
+                index = counter;
             }
             counter++;
         }
 
+        //step2 convert fft to frequency
         double freq = (index * sampleRate)/input.length;
 
-        //step 2 find correct note
+        //step 3 find note
         Note noteDetect = new Note(freq);
         note = noteDetect.getNote();
         frequency = noteDetect.getFrequency();

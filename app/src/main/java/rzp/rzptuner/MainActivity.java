@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private volatile int readSize;
     private volatile short [] buffer;
     private AudioRecord audioRecord;
-    private boolean isRecording;
     private volatile Note currentNote;
 
 
@@ -64,11 +63,10 @@ public class MainActivity extends AppCompatActivity {
         public TunerTask(){
             super();
             i = 0;
-            sampleRate = 44100;
+            sampleRate = 11025;
             bufferSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
             readSize = bufferSize;
-            buffer = new short[readSize];
-            isRecording = false;
+            buffer = new short[readSize];   // length = 1024
             audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
             currentNote = new Note(Note.DEFAULT_FREQUENCY);
         }
@@ -80,19 +78,20 @@ public class MainActivity extends AppCompatActivity {
                 //PROCESS AUDIO
                 audioRecord.read(buffer, 0, readSize);
                 Detector d = new Detector();
-                d.getPitch(buffer, readSize);
+                d.getPitch(buffer, sampleRate);
 
                 i++;
 
                 //PUBLISH RESULT
-                publishProgress(Double.valueOf(d.getFrequency()).toString() + "   " + d.getNote() + "  " + d.getPosition());
-
+                if(d.getFrequency() > -1) {
+                    publishProgress(Double.valueOf(d.getFrequency()).toString() + "   " + d.getNote() + "  " + d.getPosition() + " " + d.getDeviation());
+                }
                 //FAKE DELAY FOR TEST
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             return null;
         }
