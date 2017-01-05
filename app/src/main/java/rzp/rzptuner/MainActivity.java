@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     private int bufferSize;
     private volatile int readSize;
     private volatile short [] buffer;
-    private AudioRecord audioRecord;
     private volatile Note currentNote;
 
 
@@ -49,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     running = false;
                     buttonStart.setText("Start");
-                    task.cancel(true);
+                    tvResult.setText("");
+                    task.cancel(false);
                 }
 
             }
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class TunerTask extends AsyncTask<Void, String, Void> {
         int i;
+        private AudioRecord audioRecord;
 
         public TunerTask(){
             super();
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 d.getPitch(buffer, sampleRate);
 
                 i++;
+                Log.d(TAG,"Deviation: " + d.getDeviation());
 
                 //PUBLISH RESULT
                 if(d.getFrequency() > -1) {
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            audioRecord.stop();
             return null;
         }
 

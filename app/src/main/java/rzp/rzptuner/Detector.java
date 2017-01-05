@@ -12,6 +12,7 @@ public class Detector {
     private double deviation;
     private int position;
 
+
     public void Detector(){
         note = "";
         position = 0;
