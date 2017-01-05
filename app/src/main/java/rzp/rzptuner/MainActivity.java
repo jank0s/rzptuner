@@ -1,5 +1,6 @@
 package rzp.rzptuner;
 
+import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private volatile int readSize;
     private volatile short [] buffer;
     private volatile Note currentNote;
-    private SpeedometerGauge guage;
+    private SpeedometerGauge gauge;
 
 
     TunerTask task;
@@ -39,8 +40,29 @@ public class MainActivity extends AppCompatActivity {
         buttonStart = (Button) findViewById(R.id.buttonStart);
         tvResult = (TextView) findViewById(R.id.tvResult);
 
-        guage = (SpeedometerGauge) findViewById(R.id.speedometer);
+        gauge = (SpeedometerGauge) findViewById(R.id.gauge);
 
+        // Add label converter
+        gauge.setLabelConverter(new SpeedometerGauge.LabelConverter() {
+            @Override
+            public String getLabelFor(double progress, double maxProgress) {
+                return String.valueOf((int) Math.round(progress));
+            }
+        });
+
+        // configure value range and ticks
+        gauge.setMaxSpeed(100);
+        gauge.setMajorTickStep(30);
+        gauge.setMinorTicks(2);
+
+        // Configure value range colors
+        gauge.addColoredRange(0, 25, Color.RED);
+        gauge.addColoredRange(25, 40, Color.YELLOW);
+        gauge.addColoredRange(40, 60, Color.GREEN);
+        gauge.addColoredRange(60, 75, Color.YELLOW);
+        gauge.addColoredRange(75, 100, Color.RED);
+
+        gauge.setSpeed(50.0);
 
         //Set on lick listener for start button
         buttonStart.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
             //VISUALIZE RESULT
             Detector d = params[0];
             tvResult.setText(Double.valueOf(d.getFrequency()).toString() + "   " + d.getNote() + "  " + d.getPosition() + " " + d.getDeviation());
+            double speed = d.getDeviation() < -50 ? 0 : (d.getDeviation() > 50? 100 : d.getDeviation() + 50.0);
+            gauge.setSpeed(speed);
         }
 
         @Override
