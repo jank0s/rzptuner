@@ -7,6 +7,12 @@
     android:orientation="vertical"
     tools:context="rzp.rzptuner.MainActivity">
 
+    <com.cardiomood.android.controls.gauge.SpeedometerGauge
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:id="@+id/speedometer" />
+
     <TextView
         android:id="@+id/tvResult"
         android:layout_width="wrap_content"

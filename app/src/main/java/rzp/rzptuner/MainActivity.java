@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.cardiomood.android.controls.gauge.SpeedometerGauge;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getCanonicalName();
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private volatile int readSize;
     private volatile short [] buffer;
     private volatile Note currentNote;
+    private SpeedometerGauge guage;
 
 
     TunerTask task;
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
         //Get references for UI elemtents
         buttonStart = (Button) findViewById(R.id.buttonStart);
         tvResult = (TextView) findViewById(R.id.tvResult);
+
+        guage = (SpeedometerGauge) findViewById(R.id.speedometer);
+
 
         //Set on lick listener for start button
         buttonStart.setOnClickListener(new View.OnClickListener() {
