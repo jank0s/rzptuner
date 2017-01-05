@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button buttonStart;
     private TextView tvResult;
+    private TextView tvNoteResult;
+    private TextView tvFrequencyResult;
     private boolean running;
     private int sampleRate;
     private int bufferSize;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         //Get references for UI elemtents
         buttonStart = (Button) findViewById(R.id.buttonStart);
         tvResult = (TextView) findViewById(R.id.tvResult);
+        tvNoteResult = (TextView) findViewById(R.id.tvNoteResult);
+        tvFrequencyResult = (TextView) findViewById(R.id.tvFrequencyResult);
 
         gauge = (SpeedometerGauge) findViewById(R.id.gauge);
 
@@ -75,9 +79,10 @@ public class MainActivity extends AppCompatActivity {
                     task.execute();
                 }else{
                     running = false;
+                    task.cancel(false);
                     buttonStart.setText("Start");
                     tvResult.setText("");
-                    task.cancel(false);
+                    gauge.setSpeed(50.0);
                 }
 
             }
@@ -110,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 d.getPitch(buffer, sampleRate);
 
                 i++;
-                Log.d(TAG,"Deviation: " + d.getDeviation());
+                Log.d(TAG, "Frequency: "+d.getFrequency() + " Note: " + d.getNote() + "  Position:" + d.getPosition() + " Deviation:" + d.getDeviation());
 
                 //PUBLISH RESULT
                 if(d.getFrequency() > -1) {
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //sleep interval
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -132,9 +137,18 @@ public class MainActivity extends AppCompatActivity {
         protected void onProgressUpdate(Detector... params){
             //VISUALIZE RESULT
             Detector d = params[0];
-            tvResult.setText(Double.valueOf(d.getFrequency()).toString() + "   " + d.getNote() + "  " + d.getPosition() + " " + d.getDeviation());
             double speed = d.getDeviation() < -50 ? 0 : (d.getDeviation() > 50? 100 : d.getDeviation() + 50.0);
             gauge.setSpeed(speed);
+            double deviation = d.getDeviation();
+            tvResult.setText(String.format("%.2f", deviation));
+            if(deviation == 0){
+                tvResult.setTextColor(Color.GREEN);
+            }else{
+                tvResult.setTextColor(Color.RED);
+            }
+            tvNoteResult.setText(d.getNote());
+            tvFrequencyResult.setText(String.format("%6.2f Hz", d.getFrequency()));
+            Log.d(TAG, "Published => Frequency: "+d.getFrequency() + " Note: " + d.getNote() + "  Position:" + d.getPosition() + " Deviation:" + d.getDeviation());
         }
 
         @Override
