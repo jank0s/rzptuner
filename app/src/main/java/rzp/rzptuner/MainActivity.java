@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private class TunerTask extends AsyncTask<Void, String, Void> {
+    private class TunerTask extends AsyncTask<Void, Detector, Void> {
         int i;
         private AudioRecord audioRecord;
 
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //PUBLISH RESULT
                 if(d.getFrequency() > -1) {
-                    publishProgress(Double.valueOf(d.getFrequency()).toString() + "   " + d.getNote() + "  " + d.getPosition() + " " + d.getDeviation());
+                    publishProgress(d);
                 }
 
                 //sleep interval
@@ -107,9 +107,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onProgressUpdate(String... params){
+        protected void onProgressUpdate(Detector... params){
             //VISUALIZE RESULT
-            tvResult.setText(params[0] + "");
+            Detector d = params[0];
+            tvResult.setText(Double.valueOf(d.getFrequency()).toString() + "   " + d.getNote() + "  " + d.getPosition() + " " + d.getDeviation());
         }
 
         @Override
