@@ -188,9 +188,14 @@ public class Note implements Serializable{
         //adding half the length to the minIndex gives us the middle index
         int pivot = (minIndex + (maxIndex - 1)) / 2;
         double midValue = array[pivot];
-        if(frequency == midValue){
+        double belowValue = ( pivot-1 > 0 )? array[pivot-1] : array[pivot];
+        double aboveValue = ( pivot+1 < array.length )? array[pivot+1] : array[pivot];
+        double fromValue = midValue - (midValue - belowValue) / 2;
+        double toValue = midValue + (aboveValue - midValue) / 2;
+
+        if(frequency >= fromValue && frequency < toValue){
             return pivot;
-        }else if(frequency < midValue){
+        }else if(frequency < fromValue){
             //frequency is less than value so search the left side of the array
             return searchForNote(frequency, array, minIndex, pivot);
         }else{

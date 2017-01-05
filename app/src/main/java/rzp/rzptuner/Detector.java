@@ -48,7 +48,14 @@ public class Detector {
         Note noteDetect = new Note(freq);
         note = noteDetect.getNote();
         frequency = noteDetect.getFrequency();
-        deviation = noteDetect.getDifference();
+        double absDiff = noteDetect.getDifference();
+        if (absDiff > 0 && noteDetect.getNoteAboveFrequency() != 0 || noteDetect.getNoteBelowFrequency() == 0){
+            deviation = absDiff / (noteDetect.getNoteAboveFrequency() - noteDetect.getFrequency()) * 100;
+            System.out.println("ABOVE absDiff: " + absDiff + " freq:" + noteDetect.getFrequency()+ " actual: "+ noteDetect.getActualFrequency() + " above: "+noteDetect.getNoteAboveFrequency()+" deviation: "+deviation);
+        }else{
+            deviation = absDiff / (noteDetect.getFrequency() - noteDetect.getNoteBelowFrequency()) * 100;
+            System.out.println("BELOW absDiff: " + absDiff + " freq:" + noteDetect.getFrequency()+ " actual: "+ noteDetect.getActualFrequency() +" below: "+noteDetect.getNoteBelowFrequency()+" deviation: "+deviation);
+        }
         position = noteDetect.getPosition();
     }
 
