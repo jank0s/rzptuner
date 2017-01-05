@@ -88,9 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 if(d.getFrequency() > -1) {
                     publishProgress(Double.valueOf(d.getFrequency()).toString() + "   " + d.getNote() + "  " + d.getPosition() + " " + d.getDeviation());
                 }
-                //FAKE DELAY FOR TEST
+
+                //sleep interval
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
