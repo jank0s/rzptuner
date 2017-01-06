@@ -1,10 +1,14 @@
 package rzp.rzptuner;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private SpeedometerGauge gauge;
 
     TunerTask task;
+
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int hasAudioRecordPermission = checkSelfPermission(Manifest.permission.RECORD_AUDIO);
+                if (hasAudioRecordPermission != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[] {Manifest.permission.RECORD_AUDIO},
+                            REQUEST_CODE_ASK_PERMISSIONS);
+                    return;
+                }
                 if(!running){
                     running = true;
                     buttonPlay.setEnabled(false);
@@ -134,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
             super();
             i = 0;
             sampleRate = 11025;
-            bufferSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
+//            bufferSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
+            bufferSize = 16384;
             readSize = bufferSize;
             buffer = new short[readSize];   // length = 1024
             audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
