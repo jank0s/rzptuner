@@ -147,9 +147,9 @@ public class MainActivity extends AppCompatActivity {
         public TunerTask(){
             super();
             i = 0;
-            sampleRate = 11025;
+            sampleRate = 11025;  // options [11025, 22050, 44100]
 //            bufferSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
-            bufferSize = 4096;
+            bufferSize = 4096;  // size = 2^x
             readSize = bufferSize;
             buffer = new short[readSize];
             audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
