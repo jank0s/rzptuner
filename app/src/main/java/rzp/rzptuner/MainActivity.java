@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(android.os.Build.VERSION.SDK_INT > 22) {
+                if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                     int hasAudioRecordPermission = checkSelfPermission(Manifest.permission.RECORD_AUDIO);
                     if (hasAudioRecordPermission != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},
@@ -149,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
             i = 0;
             sampleRate = 11025;
 //            bufferSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
-            bufferSize = 16384;
+            bufferSize = 4096;
             readSize = bufferSize;
-            buffer = new short[readSize];   // length = 1024
+            buffer = new short[readSize];
             audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
             currentNote = new Note(Note.DEFAULT_FREQUENCY);
         }
@@ -174,11 +174,11 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //sleep interval
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
             audioRecord.stop();
             return null;
