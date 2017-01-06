@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -47,18 +48,28 @@
         android:orientation="horizontal"
         android:gravity="bottom">
 
-        <Button
+        <info.hoang8f.widget.FButton
             android:id="@+id/buttonPlay"
+            fbutton:buttonColor="@color/colorPrimary"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"
             android:text="Play"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content" />
 
-        <Button
+        <info.hoang8f.widget.FButton
             android:id="@+id/buttonStart"
+            fbutton:buttonColor="@color/colorPrimary"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"
             android:text="Detect"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content" />
     </LinearLayout>
 </RelativeLayout>
