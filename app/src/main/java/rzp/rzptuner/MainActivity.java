@@ -18,10 +18,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getCanonicalName();
 
     private Button buttonStart;
+    private Button buttonPlay;
     private TextView tvResult;
     private TextView tvNoteResult;
     private TextView tvFrequencyResult;
     private boolean running;
+    private boolean playing;
     private int sampleRate;
     private int bufferSize;
     private volatile int readSize;
@@ -29,9 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private volatile Note currentNote;
     private SpeedometerGauge gauge;
 
-
     TunerTask task;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Get references for UI elemtents
         buttonStart = (Button) findViewById(R.id.buttonStart);
+        buttonPlay = (Button) findViewById(R.id.buttonPlay);
         tvResult = (TextView) findViewById(R.id.tvResult);
         tvNoteResult = (TextView) findViewById(R.id.tvNoteResult);
         tvFrequencyResult = (TextView) findViewById(R.id.tvFrequencyResult);
@@ -67,22 +68,57 @@ public class MainActivity extends AppCompatActivity {
         gauge.addColoredRange(75, 100, Color.RED);
 
         gauge.setSpeed(50.0);
+        tvResult.setText("0 %");
+        tvResult.setTextColor(Color.GREEN);
+        tvFrequencyResult.setText("440.00 Hz");
+        tvNoteResult.setText("A");
 
-        //Set on lick listener for start button
+
+        //Set on lick listener for detect button
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!running){
                     running = true;
+                    buttonPlay.setEnabled(false);
                     buttonStart.setText("Stop");
                     task = new TunerTask();
                     task.execute();
                 }else{
                     running = false;
                     task.cancel(false);
-                    buttonStart.setText("Start");
+                    buttonStart.setText("Detect");
                     tvResult.setText("");
                     gauge.setSpeed(50.0);
+                    tvResult.setText("0 %");
+                    tvResult.setTextColor(Color.GREEN);
+                    tvFrequencyResult.setText("440.00 Hz");
+                    tvNoteResult.setText("A");
+                    buttonPlay.setEnabled(true);
+                }
+
+            }
+        });
+
+        //Set on lick listener for play button
+        buttonPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!playing){
+                    buttonStart.setEnabled(false);
+                    playing = true;
+                    buttonPlay.setText("Stop");
+                    //
+                }else{
+                    playing = false;
+                    //
+                    buttonPlay.setText("Play");
+                    gauge.setSpeed(50.0);
+                    tvResult.setText("0 %");
+                    tvResult.setTextColor(Color.GREEN);
+                    tvFrequencyResult.setText("440.00 Hz");
+                    tvNoteResult.setText("A");
+                    buttonStart.setEnabled(true);
                 }
 
             }

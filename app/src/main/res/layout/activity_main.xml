@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -7,48 +7,58 @@
     android:orientation="vertical"
     tools:context="rzp.rzptuner.MainActivity">
 
-    <com.cardiomood.android.controls.gauge.SpeedometerGauge
-        android:layout_height="wrap_content"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:padding="8dp"
-        android:id="@+id/gauge" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="top">
+        <com.cardiomood.android.controls.gauge.SpeedometerGauge
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:id="@+id/gauge" />
 
-    <TextView
-        android:id="@+id/tvResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tvResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/tvNoteResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="64sp" />
+        <TextView
+            android:id="@+id/tvNoteResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="64sp" />
 
-    <TextView
-        android:id="@+id/tvFrequencyResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tvFrequencyResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="bottom">
 
-        <View
+        <Button
+            android:id="@+id/buttonPlay"
+            android:text="Play"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/buttonStart"
-            android:text="Start"
+            android:text="Detect"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content" />
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
