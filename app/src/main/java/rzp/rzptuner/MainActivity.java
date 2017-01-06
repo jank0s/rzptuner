@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             double speed = d.getDeviation() < -50 ? 0 : (d.getDeviation() > 50? 100 : d.getDeviation() + 50.0);
             gauge.setSpeed(speed);
             double deviation = d.getDeviation();
-            tvResult.setText(String.format("%.2f", deviation));
+            tvResult.setText(String.format("%.2f %%", deviation));
             if(deviation == 0){
                 tvResult.setTextColor(Color.GREEN);
             }else{
