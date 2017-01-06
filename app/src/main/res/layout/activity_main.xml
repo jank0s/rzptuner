@@ -51,8 +51,7 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/buttonPlay"
             fbutton:buttonColor="@color/colorPrimary"
-            fbutton:shadowEnabled="true"
-            fbutton:shadowHeight="5dp"
+            fbutton:shadowEnabled="false"
             fbutton:cornerRadius="5dp"
             android:text="Play"
             android:layout_width="0dp"
@@ -63,8 +62,7 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/buttonStart"
             fbutton:buttonColor="@color/colorPrimary"
-            fbutton:shadowEnabled="true"
-            fbutton:shadowHeight="5dp"
+            fbutton:shadowEnabled="false"
             fbutton:cornerRadius="5dp"
             android:text="Detect"
             android:layout_width="0dp"
