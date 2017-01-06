@@ -84,11 +84,13 @@ public class MainActivity extends AppCompatActivity {
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int hasAudioRecordPermission = checkSelfPermission(Manifest.permission.RECORD_AUDIO);
-                if (hasAudioRecordPermission != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[] {Manifest.permission.RECORD_AUDIO},
-                            REQUEST_CODE_ASK_PERMISSIONS);
-                    return;
+                if(android.os.Build.VERSION.SDK_INT > 22) {
+                    int hasAudioRecordPermission = checkSelfPermission(Manifest.permission.RECORD_AUDIO);
+                    if (hasAudioRecordPermission != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},
+                                REQUEST_CODE_ASK_PERMISSIONS);
+                        return;
+                    }
                 }
                 if(!running){
                     running = true;
