@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             while(!isCancelled()){
                 //PROCESS AUDIO
                 audioRecord.read(buffer, 0, readSize);
-                Detector d = new Detector();
+                Detector d = new Detector(offset);
                 d.getPitch(buffer, sampleRate);
 
                 i++;

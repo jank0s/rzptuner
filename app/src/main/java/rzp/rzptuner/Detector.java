@@ -8,16 +8,17 @@ import static rzp.rzptuner.FFT.fft;
 
 public class Detector {
     private String note;
+    private double offset;
     private double frequency;
     private double deviation;
     private int position;
 
-
-    public void Detector(){
+    public Detector(double offset){
         note = "";
         position = 0;
         deviation = 0.0;
         frequency = 0.0;
+        this.offset = offset;
     }
 
     public void getPitch(short[] buffer, int sampleRate){
@@ -45,7 +46,7 @@ public class Detector {
         double freq = (index * sampleRate)/input.length;
 
         //step 3 find note
-        Note noteDetect = new Note(freq);
+        Note noteDetect = new Note(freq - offset);
         note = noteDetect.getNote();
         frequency = noteDetect.getFrequency();
         double absDiff = noteDetect.getDifference();
