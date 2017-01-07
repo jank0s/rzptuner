@@ -9,8 +9,6 @@ import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,9 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Button buttonStart;
     private Button buttonPlay;
+    private Button buttonPlus;
+    private Button buttonMinus;
     private TextView tvResult;
     private TextView tvNoteResult;
     private TextView tvFrequencyResult;
+    private SpeedometerGauge gauge;
     private boolean running;
     private boolean playing;
     private int sampleRate;
@@ -35,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private volatile int readSize;
     private volatile short [] buffer;
     private volatile Note currentNote;
-    private SpeedometerGauge gauge;
+    private volatile double offset;
+
 
     TunerTask task;
     PlayerTask playerTask;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         //Get references for UI elemtents
         buttonStart = (Button) findViewById(R.id.buttonStart);
         buttonPlay = (Button) findViewById(R.id.buttonPlay);
+        buttonPlus = (Button) findViewById(R.id.buttonPlus);
+        buttonMinus = (Button) findViewById(R.id.buttonMinus);
         tvResult = (TextView) findViewById(R.id.tvResult);
         tvNoteResult = (TextView) findViewById(R.id.tvNoteResult);
         tvFrequencyResult = (TextView) findViewById(R.id.tvFrequencyResult);
