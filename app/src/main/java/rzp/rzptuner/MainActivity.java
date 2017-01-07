@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private volatile int readSize;
     private volatile short [] buffer;
     private volatile Note currentNote;
+    private volatile double currentFrequency;
     private volatile double offset;
 
 
@@ -83,11 +84,28 @@ public class MainActivity extends AppCompatActivity {
         gauge.setSpeed(50.0);
         tvResult.setText("0 %");
         tvResult.setTextColor(Color.GREEN);
-        tvFrequencyResult.setText("440.00 Hz");
+        currentFrequency = 440.0;
+        tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency));
         tvNoteResult.setText("A");
 
+        //Set offset buttons on click listener
+        buttonMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentFrequency -= 1.0;
+                tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency + offset));
+            }
+        });
+        buttonPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentFrequency += 1.0;
+                tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency + offset));
+            }
+        });
 
-        //Set on lick listener for detect button
+
+        //Set on click listener for detect button
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
                     gauge.setSpeed(50.0);
                     tvResult.setText("0 %");
                     tvResult.setTextColor(Color.GREEN);
-                    tvFrequencyResult.setText("440.00 Hz");
+                    currentFrequency = 440.0;
+                    tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency + offset));
                     tvNoteResult.setText("A");
                     buttonPlay.setEnabled(true);
                 }
@@ -139,7 +158,8 @@ public class MainActivity extends AppCompatActivity {
                     gauge.setSpeed(50.0);
                     tvResult.setText("0 %");
                     tvResult.setTextColor(Color.GREEN);
-                    tvFrequencyResult.setText("440.00 Hz");
+                    currentFrequency = 440.0;
+                    tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency+offset));
                     tvNoteResult.setText("A");
                     buttonStart.setEnabled(true);
                 }
@@ -207,7 +227,8 @@ public class MainActivity extends AppCompatActivity {
                 tvResult.setTextColor(Color.RED);
             }
             tvNoteResult.setText(d.getNote());
-            tvFrequencyResult.setText(String.format("%6.2f Hz", d.getFrequency()));
+            currentFrequency = d.getFrequency();
+            tvFrequencyResult.setText(String.format("%6.2f Hz", currentFrequency + offset));
             Log.d(TAG, "Published => Frequency: "+d.getFrequency() + " Note: " + d.getNote() + "  Position:" + d.getPosition() + " Deviation:" + d.getDeviation());
         }
 
