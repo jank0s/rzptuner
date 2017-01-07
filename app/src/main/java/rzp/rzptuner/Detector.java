@@ -7,6 +7,7 @@ import static rzp.rzptuner.FFT.fft;
  */
 
 public class Detector {
+    private Note noteDetect;
     private String note;
     private double offset;
     private double frequency;
@@ -46,7 +47,7 @@ public class Detector {
         double freq = (index * sampleRate)/input.length;
 
         //step 3 find note
-        Note noteDetect = new Note(freq - offset);
+        noteDetect = new Note(freq - offset);
         note = noteDetect.getNote();
         frequency = noteDetect.getFrequency();
         double absDiff = noteDetect.getDifference();
@@ -91,4 +92,9 @@ public class Detector {
     public void setPosition(int position) {
         this.position = position;
     }
+
+    public Note getNoteDetext() {
+        return noteDetect;
+    }
+
 }

@@ -86,8 +86,9 @@ public class MainActivity extends AppCompatActivity {
         tvResult.setText("0 %");
         tvResult.setTextColor(Color.GREEN);
         currentFrequency = 440.0;
+        currentNote = new Note(440.0);
         tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency));
-        tvNoteResult.setText("A");
+        tvNoteResult.setText(currentNote.getNote());
 
         //Set offset buttons on click listener
         buttonMinus.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 offset -= 1.0;
                 tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency + offset));
+                if(playing){
+                    player.stop();
+                    player = new Player(currentFrequency + offset);
+                    player.play();
+                }
             }
         });
         buttonPlus.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 offset += 1.0;
                 tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency + offset));
+                if(playing){
+                    player.stop();
+                    player = new Player(currentFrequency + offset);
+                    player.play();
+                }
             }
         });
 
