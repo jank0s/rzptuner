@@ -39,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
     private volatile Note currentNote;
     private volatile double currentFrequency;
     private volatile double offset;
+    private Player player;
 
 
     TunerTask task;
-    PlayerTask playerTask;
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
@@ -149,17 +149,17 @@ public class MainActivity extends AppCompatActivity {
                     buttonStart.setEnabled(false);
                     playing = true;
                     buttonPlay.setText("Stop");
-                    playerTask = new PlayerTask();
-                    playerTask.execute();
+                    player = new Player(currentFrequency + offset);
+                    player.play();
                 }else{
                     playing = false;
-                    playerTask.cancel(false);
                     buttonPlay.setText("Play");
+                    player.stop();
                     gauge.setSpeed(50.0);
                     tvResult.setText("0 %");
                     tvResult.setTextColor(Color.GREEN);
                     currentFrequency = 440.0;
-                    tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency+offset));
+                    tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency + offset));
                     tvNoteResult.setText("A");
                     buttonStart.setEnabled(true);
                 }
@@ -230,29 +230,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
-    private class PlayerTask extends AsyncTask<Void, Void, Void> {
-
-        private AudioTrack audioTrack;
-
-        public PlayerTask(){
-            super();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            Player player = new Player(440.0);
-            player.play();
-
-            while (!isCancelled()){
-
-            }
-            player.stop();
-            return null;
-        }
-
-    }
-
 }
