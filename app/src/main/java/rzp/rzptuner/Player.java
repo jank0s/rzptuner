@@ -12,10 +12,8 @@ import java.util.List;
  */
 
 public class Player {
-
     private double frequency;
     private int sampleRate;
-    private AudioTrack audioTrack;
     private volatile int bufferSize;
     private volatile int sampleCount;
     private AudioTrack audioTrack1;

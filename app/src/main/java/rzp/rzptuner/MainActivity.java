@@ -1,11 +1,8 @@
 package rzp.rzptuner;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
-import android.media.AudioTrack;
+
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -16,15 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.cardiomood.android.controls.gauge.SpeedometerGauge;
 
-import static android.Manifest.permission;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.graphics.Color.GREEN;
 import static android.graphics.Color.RED;
 import static android.graphics.Color.YELLOW;
-import static android.os.Build.VERSION;
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES;
 import static android.os.Build.VERSION_CODES.M;
 import static android.util.Log.d;
 import static android.view.View.INVISIBLE;
@@ -35,7 +29,6 @@ import static java.lang.Math.round;
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
 import static rzp.rzptuner.R.id;
-import static rzp.rzptuner.R.layout;
 import static rzp.rzptuner.R.layout.activity_main;
 
 
@@ -56,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private volatile boolean running;
     private volatile boolean playing;
     private int sampleRate;
-    private int sampleCount;
-    private double frequency;
     private int bufferSize;
     private volatile int readSize;
     private volatile short [] buffer;
