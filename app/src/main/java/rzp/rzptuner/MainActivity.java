@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioRecord;
+import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private SpeedometerGauge gauge;
 
     TunerTask task;
+    PlayerTask playerTask;
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
@@ -122,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
                     buttonStart.setEnabled(false);
                     playing = true;
                     buttonPlay.setText("Stop");
+                    playerTask = new PlayerTask();
+                    playerTask.execute();
                     //
                 }else{
                     playing = false;
@@ -210,5 +215,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private class PlayerTask extends AsyncTask<Void, Void, Void> {
+
+        public PlayerTask(){
+            super();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STATIC);
+            while(!isCancelled()){
+                Player player = new Player();
+                byte[] buffer = player.getBufferTone(440.0);
+                track.write(buffer, 0, bufferSize);
+                track.play();
+            }
+            track.stop();
+            return null;
+        }
+
+    }
 
 }
