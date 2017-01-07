@@ -26,6 +26,8 @@ public class Player {
         frequency = freq;
         sampleRate = 44100;
         this.init();
+        audioTrack1 = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, 2 * sound.size(), AudioTrack.MODE_STATIC);
     }
 
     public void init(){
@@ -42,8 +44,6 @@ public class Player {
     }
 
     public void play(){
-        audioTrack1 = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT, 2 * sound.size(), AudioTrack.MODE_STATIC);
         audioTrack1.write(buffer, 0, sampleCount);
         audioTrack1.reloadStaticData();
         audioTrack1.setLoopPoints(0, sampleCount / 2, -1);
@@ -60,5 +60,10 @@ public class Player {
             tone.add(Math.sin(2 * Math.PI * i / (sampleRate / frequency)));
         }
         return tone;
+    }
+
+    public void setFrequency(double frequency){
+        this.frequency = frequency;
+        init();
     }
 }

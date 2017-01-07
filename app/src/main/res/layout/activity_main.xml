@@ -44,13 +44,23 @@
                 android:layout_margin="5dp"
                 android:layout_height="match_parent" />
 
-            <TextView
-                android:id="@+id/tvNoteResult"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:gravity="center"
-                android:textSize="64sp" />
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tvNoteResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="64sp" />
+                <TextView
+                    android:id="@+id/tvNoteResultPosition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:layout_gravity="bottom"/>
+            </LinearLayout>
 
             <info.hoang8f.widget.FButton
                 android:id="@+id/buttonNext"
