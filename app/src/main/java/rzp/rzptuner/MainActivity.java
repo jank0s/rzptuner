@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.cardiomood.android.controls.gauge.SpeedometerGauge;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getCanonicalName();
@@ -32,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean running;
     private boolean playing;
     private int sampleRate;
+    private int sampleCount;
+    private double frequency;
     private int bufferSize;
     private volatile int readSize;
     private volatile short [] buffer;
@@ -144,16 +149,23 @@ public class MainActivity extends AppCompatActivity {
         buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+//                    int hasAudioRecordPermission = checkSelfPermission(Manifest.permission.CAPTURE_AUDIO_OUTPUT);
+//                    if (hasAudioRecordPermission != PackageManager.PERMISSION_GRANTED) {
+//                        requestPermissions(new String[]{Manifest.permission.CAPTURE_AUDIO_OUTPUT},
+//                                REQUEST_CODE_ASK_PERMISSIONS);
+//                        return;
+//                    }
+//                }
                 if(!playing){
                     buttonStart.setEnabled(false);
                     playing = true;
                     buttonPlay.setText("Stop");
                     playerTask = new PlayerTask();
                     playerTask.execute();
-                    //
                 }else{
                     playing = false;
-                    //
+                    playerTask.cancel(false);
                     buttonPlay.setText("Play");
                     gauge.setSpeed(50.0);
                     tvResult.setText("0 %");
@@ -242,20 +254,31 @@ public class MainActivity extends AppCompatActivity {
 
     private class PlayerTask extends AsyncTask<Void, Void, Void> {
 
+        private AudioTrack audioTrack;
+
         public PlayerTask(){
             super();
+            sampleRate = 44100;
+//            bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+//            sampleCount = bufferSize;
+            frequency = 440.0;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STATIC);
-            while(!isCancelled()){
-                Player player = new Player();
-                byte[] buffer = player.getBufferTone(440.0);
-                track.write(buffer, 0, bufferSize);
-                track.play();
+
+            Player player = new Player(440.0);
+            player.play();
+
+            while (!isCancelled()){
+//                try {
+//                    Thread.sleep(3000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
             }
-            track.stop();
+            player.stop();
             return null;
         }
 
