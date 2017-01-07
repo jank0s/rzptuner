@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
@@ -16,9 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.cardiomood.android.controls.gauge.SpeedometerGauge;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -149,14 +145,6 @@ public class MainActivity extends AppCompatActivity {
         buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-//                    int hasAudioRecordPermission = checkSelfPermission(Manifest.permission.CAPTURE_AUDIO_OUTPUT);
-//                    if (hasAudioRecordPermission != PackageManager.PERMISSION_GRANTED) {
-//                        requestPermissions(new String[]{Manifest.permission.CAPTURE_AUDIO_OUTPUT},
-//                                REQUEST_CODE_ASK_PERMISSIONS);
-//                        return;
-//                    }
-//                }
                 if(!playing){
                     buttonStart.setEnabled(false);
                     playing = true;
@@ -189,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
             super();
             i = 0;
             sampleRate = 11025;  // options [11025, 22050, 44100]
-//            bufferSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
             bufferSize = 4096;  // size = 2^x
             readSize = bufferSize;
             buffer = new short[readSize];
@@ -213,13 +200,6 @@ public class MainActivity extends AppCompatActivity {
                 if(d.getFrequency() > -1) {
                     publishProgress(d);
                 }
-
-                //sleep interval
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
             }
             audioRecord.stop();
             return null;
@@ -258,10 +238,6 @@ public class MainActivity extends AppCompatActivity {
 
         public PlayerTask(){
             super();
-            sampleRate = 44100;
-//            bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
-//            sampleCount = bufferSize;
-            frequency = 440.0;
         }
 
         @Override
@@ -271,12 +247,7 @@ public class MainActivity extends AppCompatActivity {
             player.play();
 
             while (!isCancelled()){
-//                try {
-//                    Thread.sleep(3000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
+
             }
             player.stop();
             return null;
