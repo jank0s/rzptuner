@@ -92,14 +92,14 @@ public class MainActivity extends AppCompatActivity {
         buttonMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentFrequency -= 1.0;
+                offset -= 1.0;
                 tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency + offset));
             }
         });
         buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentFrequency += 1.0;
+                offset += 1.0;
                 tvFrequencyResult.setText(String.format("%.2f Hz", currentFrequency + offset));
             }
         });
