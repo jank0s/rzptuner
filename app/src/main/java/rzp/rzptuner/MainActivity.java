@@ -126,11 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 offset -= 1.0;
                 tvFrequencyResult.setText(format("%.2f Hz", currentNote.getFrequency() + offset));
                 tvNoteResultPosition.setText("" + currentNote.getPosition());
-                if (playing) {
-                    player.stop();
-                    player.setFrequency(currentNote.getFrequency() + offset);
-                    player.play();
-                }
             }
         });
         buttonPlus.setOnClickListener(new OnClickListener() {
@@ -139,11 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 offset += 1.0;
                 tvFrequencyResult.setText(format("%.2f Hz", currentNote.getFrequency() + offset));
                 tvNoteResultPosition.setText("" + currentNote.getPosition());
-                if (playing) {
-                    player.stop();
-                    player.setFrequency(currentNote.getFrequency() + offset);
-                    player.play();
-                }
             }
         });
 
@@ -212,9 +202,9 @@ public class MainActivity extends AppCompatActivity {
                     gauge.setSpeed(50.0);
                     tvResult.setText("0 %");
                     tvResult.setTextColor(GREEN);
-                    //currentNote = new Note(440.0);
-                    //tvFrequencyResult.setText(String.format("%.2f Hz", currentNote.getFrequency() + offset));
-                    //tvNoteResultPosition.setText(currentNote.getPosition());
+                    currentNote = new Note(440.0);
+                    tvFrequencyResult.setText(String.format("%.2f Hz", currentNote.getFrequency() + offset));
+                    tvNoteResultPosition.setText("" + currentNote.getPosition());
                     tvNoteResult.setText(currentNote.getNote());
                     buttonPlay.setEnabled(true);
                     buttonPrev.setVisibility(VISIBLE);
@@ -230,6 +220,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!playing) {
                     buttonStart.setEnabled(false);
+                    buttonPlus.setVisibility(INVISIBLE);
+                    buttonMinus.setVisibility(INVISIBLE);
                     playing = true;
                     buttonPlay.setText("Stop");
                     player.setFrequency(currentNote.getFrequency() + offset);
@@ -243,6 +235,8 @@ public class MainActivity extends AppCompatActivity {
                     tvResult.setTextColor(GREEN);
                     tvNoteResult.setText(currentNote.getNote());
                     buttonStart.setEnabled(true);
+                    buttonPlus.setVisibility(VISIBLE);
+                    buttonMinus.setVisibility(VISIBLE);
                 }
 
             }
