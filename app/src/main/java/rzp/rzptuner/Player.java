@@ -1,6 +1,7 @@
 package rzp.rzptuner;
 
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioTrack;
 
 import java.util.ArrayList;
@@ -14,28 +15,43 @@ public class Player {
 
     private double frequency;
     private int sampleRate;
+    private AudioTrack audioTrack;
     private volatile int bufferSize;
     private volatile int sampleCount;
-    private AudioTrack track;
+    private AudioTrack audioTrack1;
+    private byte [] buffer;
     private volatile List<Double> sound;
 
-    public Player(){
-        frequency = 440.0;
+    public Player(double freq){
+        frequency = freq;
         sampleRate = 44100;
-        bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        sampleCount = bufferSize;
+        this.init();
     }
 
-    public byte[] getBufferTone(double frequency){
+    public void init(){
+        bufferSize = (int) Math.round(sampleRate / frequency);
+        sampleCount = bufferSize;
         sound = getTone(frequency, sampleRate);
-        byte[] buffer = new byte[2 * sound.size()];
+        buffer = new byte[2 * sound.size()];
         int i = 0;
         for(double d : sound){
             short val = (short) (d * 32767);
             buffer[i++] = (byte) (val & 0x00ff);
             buffer[i++] = (byte) ((val & 0xff00) >>> 8);
         }
-        return buffer;
+    }
+
+    public void play(){
+        audioTrack1 = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, 2 * sound.size(), AudioTrack.MODE_STATIC);
+        audioTrack1.write(buffer, 0, sampleCount);
+        audioTrack1.reloadStaticData();
+        audioTrack1.setLoopPoints(0, sampleCount / 2, -1);
+        audioTrack1.play();
+    }
+
+    public void stop(){
+        audioTrack1.stop();
     }
 
     private List<Double> getTone(double frequency, int sampleRate){
