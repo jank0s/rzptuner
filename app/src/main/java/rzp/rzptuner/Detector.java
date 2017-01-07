@@ -93,7 +93,7 @@ public class Detector {
         this.position = position;
     }
 
-    public Note getNoteDetext() {
+    public Note getNoteDetect() {
         return noteDetect;
     }
 
