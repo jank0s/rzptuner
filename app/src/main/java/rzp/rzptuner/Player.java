@@ -24,15 +24,15 @@ public class Player {
         frequency = freq;
         sampleRate = 44100;
         this.init();
+        bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
         audioTrack1 = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT, 2 * sound.size(), AudioTrack.MODE_STATIC);
+                AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STATIC);
     }
 
     public void init(){
-        bufferSize = (int) Math.round(sampleRate / frequency);
-        sampleCount = bufferSize;
+        sampleCount = (int) Math.round(sampleRate / frequency);;
         sound = getTone(frequency, sampleRate);
-        buffer = new byte[2 * sound.size()];
+        buffer = new byte[2 * sampleCount];
         int i = 0;
         for(double d : sound){
             short val = (short) (d * 32767);
@@ -42,9 +42,9 @@ public class Player {
     }
 
     public void play(){
-        audioTrack1.write(buffer, 0, sampleCount);
+        audioTrack1.write(buffer, 0, buffer.length);
         audioTrack1.reloadStaticData();
-        audioTrack1.setLoopPoints(0, sampleCount / 2, -1);
+        audioTrack1.setLoopPoints(0, buffer.length / 2 , -1);
         audioTrack1.play();
     }
 
