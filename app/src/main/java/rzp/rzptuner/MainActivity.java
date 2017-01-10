@@ -252,13 +252,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
+
             audioRecord.startRecording();
             while(!isCancelled()){
+
                 //PROCESS AUDIO
+
                 audioRecord.read(buffer, 0, readSize);
+
+                long time = System.currentTimeMillis();
                 Detector d = new Detector(offset);
                 d.getPitch(buffer, sampleRate);
-
+                time = System.currentTimeMillis() - time;
                 i++;
                 Log.d(TAG, "Frequency: "+d.getFrequency() + " Note: " + d.getNote() + "  Position:" + d.getPosition() + " Deviation:" + d.getDeviation());
 
@@ -266,6 +271,8 @@ public class MainActivity extends AppCompatActivity {
                 if(d.getFrequency() > -1) {
                     publishProgress(d);
                 }
+
+                Log.d(TAG, "Time: "+time+"ms");
             }
             audioRecord.stop();
             return null;
