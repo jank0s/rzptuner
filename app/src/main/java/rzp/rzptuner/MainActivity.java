@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
             bufferSize = 4096;  // size = 2^x
             readSize = bufferSize;
             buffer = new short[readSize];
-            audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+            audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, bufferSize * 2);
             currentNote = new Note(Note.DEFAULT_FREQUENCY);
         }
 
